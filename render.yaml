@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: bidsetu-platform
+    env: node
+    region: singapore
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        value: mongodb+srv://kaushikprayag7_db_user:a9hI2zpMtnf97Km7@cluster0.0nftxmb.mongodb.net/?appName=Cluster0
+      - key: MONGODB_DB_NAME
+        value: bidsetu
+      - key: AUTH_SECRET
+        value: bidsetu-secure-secret-key-2026-onebuilds
+      - key: OCR_SERVICE_URL
+        value: https://paddleocrr.onrender.com
