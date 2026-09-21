@@ -5,10 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Search, Menu, X, ArrowRight, LayoutDashboard } from "lucide-react";
 import GovtHeaderTopBar from "./GovtHeaderTopBar";
+import GlobalSearchModal from "../search/GlobalSearchModal";
 
 export default function PublicHeaderNavbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [userSession, setUserSession] = useState<{ name: string; role: string } | null>(null);
 
   useEffect(() => {
@@ -86,9 +88,8 @@ export default function PublicHeaderNavbar() {
           <button
             className="search-button"
             aria-label="Search"
-            onClick={() =>
-              alert("Search BIDSETU Tenders, Bids, or GFR Compliance Guidelines...")
-            }
+            onClick={() => setSearchModalOpen(true)}
+            title="Search Tenders, Guidelines, Documents (Ctrl+K)"
           >
             <Search size={17} strokeWidth={2.2} />
           </button>
@@ -152,7 +153,7 @@ export default function PublicHeaderNavbar() {
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
-                    alert("Search BIDSETU Tenders, Bids, or GFR Compliance Guidelines...");
+                    setSearchModalOpen(true);
                   }}
                   className="w-full py-2.5 px-3 bg-slate-100 text-[#36536d] text-xs font-semibold rounded-lg flex items-center justify-center gap-2"
                 >
@@ -183,6 +184,12 @@ export default function PublicHeaderNavbar() {
           </div>
         )}
       </header>
+
+      {/* GLOBAL SEARCH MODAL */}
+      <GlobalSearchModal
+        isOpen={searchModalOpen}
+        onClose={() => setSearchModalOpen(false)}
+      />
     </>
   );
 }

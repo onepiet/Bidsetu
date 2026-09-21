@@ -17,6 +17,8 @@ import {
   PlusCircle,
   X,
   FileText,
+  ChevronDown,
+  Check,
 } from "lucide-react";
 
 export default function VendorDashboardPage() {
@@ -27,6 +29,7 @@ export default function VendorDashboardPage() {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedTenderId, setSelectedTenderId] = useState("");
+  const [tenderDropdownOpen, setTenderDropdownOpen] = useState(false);
   const [submissionProposal, setSubmissionProposal] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -38,6 +41,17 @@ export default function VendorDashboardPage() {
     timestamp: string;
   } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setTenderDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Fetch data live from MongoDB API
   const fetchData = async () => {
@@ -316,38 +330,72 @@ export default function VendorDashboardPage() {
               ) : myBids.length === 0 ? (
                 <div className="p-4 text-center text-xs text-gray-400">No bids submitted yet.</div>
               ) : (
-                myBids.map((b) => {
+                myBids.map((b, idx) => {
                   const targetTender = tenders.find((t) => t._id === b.tenderId);
+                  const dateObj = new Date(b.submittedAt || Date.now());
+                  const formattedDate = dateObj.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  });
+                  const formattedTime = dateObj.toLocaleTimeString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  });
+
                   return (
-                    <div key={b._id} className="p-4 bg-white border border-[#e2eaf0] rounded-lg shadow-2xs hover:border-[#0b5f96] transition-colors">
-                      <div className="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
-                        <span className="font-mono text-xs font-bold text-[#0b5f96]">
-                          {targetTender?.tenderId || "TND-2026-MNRE-0842"}
-                        </span>
+                    <div
+                      key={b._id}
+                      className="p-4 bg-white border border-[#e2eaf0] rounded-xl shadow-2xs hover:border-[#0b5f96] transition-all space-y-2 border-l-4 border-l-[#0b5f96]"
+                    >
+                      {/* CARD TOP HEADER: BID ID BADGE + TENDER ID + FILING SEQUENCE + STATUS BADGE */}
+                      <div className="flex items-center justify-between gap-2 flex-wrap">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="px-2 py-0.5 rounded bg-slate-900 text-white font-mono text-[10.5px] font-bold shadow-2xs">
+                            BID ID: {b._id}
+                          </span>
+                          <span className="font-mono text-xs font-bold text-[#0b5f96]">
+                            {targetTender?.tenderId || (b.tenderId && b.tenderId.startsWith("TND") ? b.tenderId : "TND-2026-MNRE-0842")}
+                          </span>
+                          <span className="px-2 py-0.5 bg-blue-50 text-[#0b5f96] text-[10px] font-bold rounded border border-blue-200">
+                            Filing #{myBids.length - idx}
+                          </span>
+                        </div>
                         <span className="badge bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10.5px] font-bold">
-                          SENT FOR FINAL VERIFICATION
+                          {b.status === "SUBMITTED" ? "SENT FOR FINAL VERIFICATION" : b.status.replace("_", " ")}
                         </span>
                       </div>
+
+                      {/* TENDER TITLE */}
                       <h4 className="text-xs font-bold text-navy leading-snug">
-                        {targetTender?.title || "Implementation of 500MW Grid-Connected Solar Infrastructure"}
+                        {targetTender?.title || "Implementation of 500MW Grid-Connected Solar Photovoltaic Infrastructure"}
                       </h4>
-                      <div className="flex items-center gap-3 text-[11px] text-[#64798c] mt-1.5 flex-wrap">
-                        <span>Submitted: {new Date(b.submittedAt).toLocaleDateString()}</span>
+
+                      {/* SUBMISSION METADATA: DATE & TIME STAMP + ATTACHED FILINGS */}
+                      <div className="flex items-center gap-3 text-[11px] text-[#64798c] flex-wrap bg-[#f8fafc] px-3 py-1.5 rounded-md border border-slate-200/70">
+                        <div className="flex items-center gap-1 font-medium text-slate-700">
+                          <Clock size={12} className="text-[#0b5f96]" />
+                          <span>Submitted: <strong>{formattedDate}</strong> at <strong>{formattedTime}</strong></span>
+                        </div>
                         <span className="text-gray-300">•</span>
-                        <span className="flex items-center gap-1 text-[#0b5f96] font-medium">
-                          <FileText size={12} /> {b.documentIds?.length || 1} Document Filings Attached
-                        </span>
+                        <div className="flex items-center gap-1 text-[#0b5f96] font-semibold">
+                          <FileText size={12} />
+                          <span>{b.documentIds?.length || 1} Proposal Document(s) Attached</span>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-[#edf2f7] text-xs">
+
+                      {/* FOOTER ACTION & SCORE */}
+                      <div className="flex items-center justify-between pt-2 border-t border-[#edf2f7] text-xs">
                         <div className="flex items-center gap-1.5">
-                          <span className="text-[#64798c]">Automated Rating: </span>
+                          <span className="text-[#64798c] font-medium">Automated Rating:</span>
                           <span className="badge bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold">
-                            {b.complianceScore !== undefined ? `${b.complianceScore}%` : "Verified"}
+                            {b.complianceScore !== undefined ? `${b.complianceScore}%` : "Pending Analysis"}
                           </span>
                         </div>
                         <Link
                           href={`/bids/${b._id}`}
-                          className="text-xs text-[#0b5f96] font-bold hover:underline flex items-center gap-1"
+                          className="text-xs text-[#0b5f96] font-bold hover:underline flex items-center gap-1 bg-[#edf7ff] hover:bg-[#e1f0fc] px-2.5 py-1 rounded-md border border-[#bce0fd] transition-colors"
                         >
                           Inspect Verification & Audit <ArrowRight size={13} />
                         </Link>
@@ -375,20 +423,87 @@ export default function VendorDashboardPage() {
               </div>
 
               <form onSubmit={handleSubmitBid} className="space-y-4 text-xs">
-                {/* TARGET TENDER SELECTOR */}
-                <div>
+                {/* TARGET TENDER SELECTOR (APPLE STYLED CUSTOM SELECT) */}
+                <div className="relative" ref={dropdownRef}>
                   <label className="block font-bold text-navy mb-1.5">Target Tender Opportunity</label>
-                  <select
-                    value={selectedTenderId}
-                    onChange={(e) => setSelectedTenderId(e.target.value)}
-                    className="w-full h-10 px-3 border border-gray-300 rounded-lg bg-white text-navy font-semibold focus:ring-2 focus:ring-[#0b5f96] focus:outline-none text-xs truncate"
+
+                  {/* APPLE-STYLED TRIGGER BUTTON */}
+                  <div
+                    onClick={() => setTenderDropdownOpen(!tenderDropdownOpen)}
+                    className={`w-full p-3 bg-[#f8fafc] hover:bg-[#edf7ff] border rounded-xl shadow-2xs hover:border-[#0b5f96] cursor-pointer flex items-center justify-between gap-3 transition-all ${
+                      tenderDropdownOpen
+                        ? "border-[#0b5f96] ring-2 ring-[#0b5f96]/20 bg-white shadow-md"
+                        : "border-[#d7e1e9]"
+                    }`}
                   >
-                    {tenders.map((t) => (
-                      <option key={t._id} value={t._id}>
-                        {t.tenderId} — {t.title}
-                      </option>
-                    ))}
-                  </select>
+                    {(() => {
+                      const activeT = tenders.find((t) => t._id === selectedTenderId) || tenders[0];
+                      if (!activeT) return <span className="text-gray-400">Select Tender Opportunity...</span>;
+                      return (
+                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                          <span className="font-mono text-xs font-bold text-[#0b5f96] bg-[#edf7ff] px-2 py-0.5 rounded border border-[#bce0fd] shrink-0">
+                            {activeT.tenderId}
+                          </span>
+                          <span className="badge bg-purple-50 text-purple-700 border border-purple-200 text-[10px] shrink-0 hidden sm:inline-block">
+                            {activeT.category}
+                          </span>
+                          <span className="text-xs font-semibold text-navy truncate flex-1">
+                            {activeT.title}
+                          </span>
+                        </div>
+                      );
+                    })()}
+                    <ChevronDown
+                      size={16}
+                      className={`text-[#0b5f96] shrink-0 transition-transform duration-200 ${
+                        tenderDropdownOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </div>
+
+                  {/* APPLE-STYLED DROPDOWN POPOVER MENU */}
+                  {tenderDropdownOpen && (
+                    <div className="absolute left-0 right-0 top-full mt-1.5 z-50 bg-white/95 backdrop-blur-md rounded-xl border border-slate-200 shadow-2xl p-1.5 space-y-1 max-h-60 overflow-y-auto animate-in fade-in zoom-in-95 duration-150">
+                      {tenders.map((t) => {
+                        const isSelected = t._id === selectedTenderId;
+                        return (
+                          <div
+                            key={t._id}
+                            onClick={() => {
+                              setSelectedTenderId(t._id);
+                              setTenderDropdownOpen(false);
+                            }}
+                            className={`p-3 rounded-lg cursor-pointer transition-all flex items-start justify-between gap-3 ${
+                              isSelected
+                                ? "bg-[#edf7ff] text-[#004e8a] font-bold border border-[#bce0fd] shadow-2xs"
+                                : "hover:bg-slate-50 text-slate-800 border border-transparent"
+                            }`}
+                          >
+                            <div className="space-y-1 min-w-0 flex-1">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className={`font-mono text-xs font-bold ${isSelected ? "text-[#004e8a]" : "text-[#0b5f96]"}`}>
+                                  {t.tenderId}
+                                </span>
+                                <span className="badge bg-purple-50 text-purple-700 border border-purple-200 text-[10px]">
+                                  {t.category}
+                                </span>
+                              </div>
+                              <div className="text-xs font-semibold leading-snug line-clamp-1">
+                                {t.title}
+                              </div>
+                              <div className="text-[10.5px] text-slate-400">
+                                Submission Deadline: {t.publication?.submissionDeadline ? new Date(t.publication.submissionDeadline).toLocaleDateString() : "Open"}
+                              </div>
+                            </div>
+
+                            {isSelected && (
+                              <Check size={16} className="text-[#004e8a] shrink-0 mt-1" strokeWidth={2.5} />
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
 
                   {/* SELECTED TENDER PREVIEW CARD */}
                   {(() => {
@@ -405,7 +520,7 @@ export default function VendorDashboardPage() {
                           </div>
                           <div className="text-xs font-bold text-navy leading-snug">{activeT.title}</div>
                         </div>
-                        <div className="text-[11px] text-[#64798c] whitespace-nowrap bg-white px-2.5 py-1 rounded border border-gray-200">
+                        <div className="text-[11px] text-[#64798c] whitespace-nowrap bg-white px-2.5 py-1 rounded border border-gray-200 font-medium">
                           Deadline: {activeT.publication?.submissionDeadline ? new Date(activeT.publication.submissionDeadline).toLocaleDateString() : "3/30/2026"}
                         </div>
                       </div>

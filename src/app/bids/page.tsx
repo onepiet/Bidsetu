@@ -95,19 +95,24 @@ export default function BidsPage() {
                   const tender = tenders.find((t) => t._id === b.tenderId);
                   return (
                     <tr key={b._id}>
-                      <td className="font-semibold text-navy">{b.vendorName}</td>
+                      <td className="font-semibold text-navy">
+                        <div>{b.vendorName}</div>
+                        <span className="inline-block mt-1 px-1.5 py-0.5 rounded bg-slate-900 text-white font-mono text-[10px] font-bold">
+                          BID ID: {b._id}
+                        </span>
+                      </td>
                       <td>
                         <div className="text-xs font-medium text-navy max-w-[280px] truncate">
                           {tender?.title || "Target Tender"}
                         </div>
-                        <div className="text-[11px] text-gray-400 font-mono mt-0.5">
+                        <div className="text-[11px] text-[#0b5f96] font-mono font-semibold mt-0.5">
                           {tender?.tenderId}
                         </div>
                       </td>
                       <td className="text-xs text-gray-500 whitespace-nowrap">
-                        <div className="flex items-center gap-1.5">
-                          <Calendar size={13} className="text-gray-400" />
-                          <span>{new Date(b.submittedAt).toLocaleDateString()}</span>
+                        <div className="flex flex-col text-[11.5px]">
+                          <span className="font-medium text-slate-700">{new Date(b.submittedAt).toLocaleDateString()}</span>
+                          <span className="text-[10.5px] text-slate-400 font-mono">{new Date(b.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
                       </td>
                       <td>

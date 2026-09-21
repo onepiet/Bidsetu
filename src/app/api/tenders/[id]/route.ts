@@ -56,7 +56,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       const updated = await TenderModel.findOneAndUpdate(
         { $or: [{ _id: id }, { tenderId: id }] },
         { $set: body },
-        { new: true }
+        { returnDocument: "after" }
       ).lean();
 
       return NextResponse.json({ success: true, data: updated });

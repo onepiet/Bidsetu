@@ -2,6 +2,7 @@
 
 import PublicHeaderNavbar from "./PublicHeaderNavbar";
 import GovtFooter from "./GovtFooter";
+import AskBidsetuFloatingWidget from "../common/AskBidsetuFloatingWidget";
 
 interface PublicLayoutProps {
   children: React.ReactNode;

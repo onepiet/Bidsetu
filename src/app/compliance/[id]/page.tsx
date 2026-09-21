@@ -404,35 +404,35 @@ export default function ComplianceAnalysisDetailPage() {
           </div>
         </div>
 
-        {/* GEMINI AI EXPLANATION SECTION */}
-        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-xl p-5 border border-indigo-900 shadow-md space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-indigo-800/60 pb-3.5">
+        {/* GEMINI AI EXPLANATION SECTION (CLEAN WHITE ENTERPRISE THEME) */}
+        <div className="bg-white text-slate-900 rounded-xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-indigo-600/30 rounded-lg border border-indigo-400/30 text-indigo-300">
+              <div className="p-2 bg-[#edf7ff] text-[#004e8a] rounded-lg border border-[#bce0fd]">
                 <Brain size={22} />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-extrabold tracking-wide uppercase text-indigo-100">
+                  <h3 className="text-sm font-extrabold tracking-wide uppercase text-slate-900">
                     AI Verification & Intelligence Summary
                   </h3>
                   {aiData?.metadata ? (
                     <span
                       className={`badge text-[10px] font-bold ${
                         aiData.metadata.mode === "live"
-                          ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
-                          : "bg-amber-500/20 text-amber-300 border-amber-500/40"
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                          : "bg-amber-50 text-amber-800 border-amber-200"
                       }`}
                     >
                       ● {aiData.metadata.mode === "live" ? "Gemini AI (Live)" : "Fallback Explanation Engine (Deterministic Rules)"}
                     </span>
                   ) : (
-                    <span className="badge bg-indigo-500/20 text-indigo-300 text-[10px]">
+                    <span className="badge bg-slate-100 text-slate-700 text-[10px] border border-slate-200">
                       ● AI Explanation Layer
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-indigo-200/80 mt-0.5">
+                <p className="text-xs text-slate-500 mt-0.5">
                   Natural-language explanation of deterministic compliance, statutory verification, and risk signals
                 </p>
               </div>
@@ -441,15 +441,15 @@ export default function ComplianceAnalysisDetailPage() {
             <button
               onClick={() => fetchAiExplanation(analysis._id || analysis.bidId)}
               disabled={loadingAi}
-              className="px-3 py-1.5 bg-indigo-800/60 hover:bg-indigo-700/80 text-indigo-100 rounded-lg border border-indigo-500/40 text-xs font-semibold flex items-center gap-1.5 transition self-start sm:self-auto"
+              className="px-3.5 py-1.5 bg-slate-50 hover:bg-slate-100 text-[#004e8a] rounded-lg border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition self-start sm:self-auto shadow-2xs"
             >
-              {loadingAi ? <Loader2 size={13} className="animate-spin" /> : <Sparkles size={13} />}
+              {loadingAi ? <Loader2 size={13} className="animate-spin text-[#004e8a]" /> : <Sparkles size={13} className="text-[#004e8a]" />}
               <span>Refresh AI Insights</span>
             </button>
           </div>
 
           {loadingAi ? (
-            <div className="flex items-center justify-center p-6 text-indigo-300 gap-2">
+            <div className="flex items-center justify-center p-6 text-[#004e8a] gap-2">
               <Loader2 className="animate-spin" size={18} />
               <span className="text-xs font-medium">Synthesizing ground-truth evaluation evidence...</span>
             </div>
@@ -457,46 +457,46 @@ export default function ComplianceAnalysisDetailPage() {
             <div className="space-y-4 text-xs">
               {/* SUMMARY & OVERALL ASSESSMENT */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-indigo-950/50 p-3.5 rounded-lg border border-indigo-800/50">
-                  <span className="font-extrabold text-indigo-300 uppercase text-[10px] tracking-wider block mb-1">
+                <div className="bg-[#f8fafc] p-4 rounded-lg border border-slate-200/80">
+                  <span className="font-extrabold text-[#004e8a] uppercase text-[10px] tracking-wider block mb-1">
                     Evaluation Executive Summary
                   </span>
-                  <p className="text-indigo-100 leading-relaxed">{aiData.summary}</p>
+                  <p className="text-slate-700 leading-relaxed font-normal">{aiData.summary}</p>
                 </div>
-                <div className="bg-indigo-950/50 p-3.5 rounded-lg border border-indigo-800/50">
-                  <span className="font-extrabold text-indigo-300 uppercase text-[10px] tracking-wider block mb-1">
+                <div className="bg-[#f8fafc] p-4 rounded-lg border border-slate-200/80">
+                  <span className="font-extrabold text-[#004e8a] uppercase text-[10px] tracking-wider block mb-1">
                     Compliance & Rule Engine Assessment
                   </span>
-                  <p className="text-indigo-100 leading-relaxed">{aiData.overallAssessment}</p>
+                  <p className="text-slate-700 leading-relaxed font-normal">{aiData.overallAssessment}</p>
                 </div>
               </div>
 
               {/* RISK & OFFICER RECOMMENDATION */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-red-950/40 p-3.5 rounded-lg border border-red-800/40">
-                  <span className="font-extrabold text-red-300 uppercase text-[10px] tracking-wider block mb-1">
+                <div className="bg-rose-50/70 p-4 rounded-lg border border-rose-200/80">
+                  <span className="font-extrabold text-rose-800 uppercase text-[10px] tracking-wider block mb-1">
                     Risk Explanation & Signals
                   </span>
-                  <p className="text-red-100 leading-relaxed">{aiData.riskExplanation}</p>
+                  <p className="text-rose-950 leading-relaxed font-medium">{aiData.riskExplanation}</p>
                 </div>
-                <div className="bg-emerald-950/40 p-3.5 rounded-lg border border-emerald-800/40">
-                  <span className="font-extrabold text-emerald-300 uppercase text-[10px] tracking-wider block mb-1">
+                <div className="bg-emerald-50/70 p-4 rounded-lg border border-emerald-200/80">
+                  <span className="font-extrabold text-emerald-800 uppercase text-[10px] tracking-wider block mb-1">
                     Officer Action Recommendation
                   </span>
-                  <p className="text-emerald-100 font-semibold leading-relaxed">{aiData.officerRecommendation}</p>
+                  <p className="text-emerald-950 font-semibold leading-relaxed">{aiData.officerRecommendation}</p>
                 </div>
               </div>
 
               {/* DISCLAIMER */}
-              <div className="text-[10.5px] text-indigo-300/70 italic border-t border-indigo-900/60 pt-2 flex items-center justify-between">
+              <div className="text-[10.5px] text-slate-400 italic border-t border-slate-100 pt-2.5 flex items-center justify-between">
                 <span>{aiData.disclaimer}</span>
-                <span className="text-[10px] text-indigo-400 font-mono">
+                <span className="text-[10px] text-slate-500 font-mono bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
                   Engine: {aiData.metadata?.model} ({aiData.metadata?.mode})
                 </span>
               </div>
             </div>
           ) : (
-            <div className="text-xs text-indigo-300/80 p-2">Click "Refresh AI Insights" to generate natural-language AI explanation.</div>
+            <div className="text-xs text-slate-500 p-2">Click &quot;Refresh AI Insights&quot; to generate natural-language AI explanation.</div>
           )}
         </div>
 

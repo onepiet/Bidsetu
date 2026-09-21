@@ -3,31 +3,36 @@
 @tailwind utilities;
 
 :root {
-  --navy: #0b426d;
-  --navy-dark: #083655;
-  --blue: #0b5f96;
-  --blue-hover: #084f7e;
+  --navy: #00599f;
+  --navy-dark: #003c6c;
+  --blue: #00599f;
+  --blue-hover: #003c6c;
 
-  --text: #173957;
-  --muted: #63778b;
+  --theme-primary: #00599f;
+  --theme-primary-dark: #003c6c;
+  --theme-primary-light: #e7edf5;
+  --theme-saffron: #D96C24;
+
+  --text: #1a1a1a;
+  --muted: #5f6368;
 
   --white: #ffffff;
-  --surface: #f6fafd;
-  --surface-blue: #edf6fc;
+  --surface: #f8f8f8;
+  --surface-blue: #f3f7f9;
 
-  --border: #d7e1e9;
+  --border: #dce5ed;
 
-  --orange: #f39a21;
-  --green: #229b68;
+  --orange: #D96C24;
+  --green: #138808;
   --purple: #7562d8;
 
-  --radius-sm: 5px;
-  --radius-md: 9px;
-  --radius-lg: 14px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
 
-  --shadow-card: 0 10px 30px rgba(25, 55, 80, 0.13);
-  --shadow-sm: 0 1px 3px rgba(18, 59, 93, 0.08);
-  --shadow-md: 0 4px 12px rgba(18, 59, 93, 0.1);
+  --shadow-card: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 14px rgba(0, 89, 159, 0.08);
 
   --container: 1400px;
 }
@@ -201,10 +206,10 @@ textarea {
   background-image:
     linear-gradient(
       90deg,
-      rgba(244, 249, 253, 0.98) 0%,
-      rgba(244, 249, 253, 0.90) 36%,
-      rgba(244, 249, 253, 0.48) 70%,
-      rgba(244, 249, 253, 0.70) 100%
+      rgba(244, 249, 253, 0.88) 0%,
+      rgba(244, 249, 253, 0.72) 40%,
+      rgba(244, 249, 253, 0.35) 70%,
+      rgba(244, 249, 253, 0.55) 100%
     ),
     url("/assets/government-building.jpg");
   background-position: center;

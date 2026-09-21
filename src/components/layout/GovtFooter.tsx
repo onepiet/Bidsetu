@@ -192,24 +192,12 @@ export default function GovtFooter() {
               </div>
             </div>
 
-            {/* VISITOR COUNTER & TEAM ONEBUILDS LOGO BADGE */}
-            <div className="flex items-center justify-between flex-wrap gap-3 pt-1">
-              <div className="flex items-center gap-3">
-                <span className="font-bold text-[13px] text-[#1f2937]">Visitors:</span>
-                <div className="bg-white border border-[#bce0fd] px-3.5 py-1 rounded-md shadow-2xs font-mono font-bold text-[14px] text-[#004e8a] tracking-wider">
-                  194,461,573
-                </div>
-              </div>
-
-              {/* TEAM CREDITS BADGE WITH ONEBUILDS LOGO */}
-              <div className="flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-xl border border-[#cbe0f2] shadow-2xs text-[11px]">
-                <span className="text-gray-500 font-medium">Powered by</span>
-                <img
-                  src="/assets/team-logo.png"
-                  alt="Team OneBuilds Logo"
-                  className="h-5 sm:h-5.5 object-contain"
-                />
-                <span className="badge bg-[#edf7ff] text-[#004e8a] border border-[#bce0fd] text-[10px] font-bold">
+            {/* TEAM CREDITS BADGE WITH ONEBUILDS & DEVELOPMENT TEAM LOGO */}
+            <div className="flex items-center justify-end flex-wrap gap-3 pt-1">
+              <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-[#cbe0f2] shadow-2xs text-[11.5px]">
+                <span className="text-gray-500 font-medium">Developed by</span>
+                <span className="font-extrabold text-[#004e8a]">OneBuilds and Development Team</span>
+                <span className="badge bg-[#edf7ff] text-[#004e8a] border border-[#bce0fd] text-[10px] font-bold ml-1">
                   SIH26100
                 </span>
               </div>
@@ -217,14 +205,11 @@ export default function GovtFooter() {
           </div>
         </div>
 
-        {/* BOTTOM LEGAL DISCLAIMER */}
+        {/* BOTTOM LEGAL & DEVELOPER FOOTER */}
         <div className="pt-5 border-t border-[#cce0f2] text-center text-[11px] text-[#4b5563] leading-relaxed">
           <p className="max-w-4xl mx-auto">
-            This Portal is Digital India Project under the National E-Governance Plan and is owned, designed & developed by National e-Governance Division (NeGD), Ministry of Electronics & IT, Govt. of India. Powered by Team OneBuilds (SIH26100). The content linked through BIDSETU is owned and maintained by the respective Ministries/Departments of Centre & State.
+            BIDSETU Platform is owned, designed & developed by <strong className="text-[#004e8a] font-bold">OneBuilds and Development Team</strong> (SIH26100). Powered by AI-Driven Procurement Compliance & Risk Intelligence.
           </p>
-          <div className="mt-2 font-medium text-[#374151]">
-            Last Updated On: 15 September 2026 | v-21.2.38
-          </div>
         </div>
       </div>
 

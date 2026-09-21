@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 
 import GovtHeaderTopBar from "./GovtHeaderTopBar";
+import GlobalSearchModal from "../search/GlobalSearchModal";
+import AskBidsetuFloatingWidget from "../common/AskBidsetuFloatingWidget";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -33,11 +35,30 @@ export default function AppShell({ children, pageTitle }: AppShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [userSession, setUserSession] = useState({
-    name: "Prayag Kaushik",
-    role: "PROCUREMENT_OFFICER",
-    email: "officer@mnre.gov.in",
-    org: "Ministry of New & Renewable Energy",
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [userSession, setUserSession] = useState(() => {
+    if (typeof window !== "undefined") {
+      const isVendor = window.location.pathname.startsWith("/vendor");
+      return isVendor
+        ? {
+            name: "Ananya Deshmukh",
+            role: "VENDOR",
+            email: "ananya.d@tatapower.com",
+            org: "Tata Power Renewable Energy Limited",
+          }
+        : {
+            name: "Prayag Kaushik",
+            role: "PROCUREMENT_OFFICER",
+            email: "officer@mnre.gov.in",
+            org: "Ministry of New & Renewable Energy",
+          };
+    }
+    return {
+      name: "Prayag Kaushik",
+      role: "PROCUREMENT_OFFICER",
+      email: "officer@mnre.gov.in",
+      org: "Ministry of New & Renewable Energy",
+    };
   });
 
   useEffect(() => {
@@ -45,13 +66,24 @@ export default function AppShell({ children, pageTitle }: AppShellProps) {
       const saved = localStorage.getItem("bidsetu_session");
       if (saved) {
         try {
-          setUserSession(JSON.parse(saved));
+          const parsed = JSON.parse(saved);
+          setUserSession((prev) => ({
+            ...prev,
+            ...parsed,
+          }));
         } catch (e) {
           console.error(e);
         }
+      } else if (pathname.startsWith("/vendor")) {
+        setUserSession({
+          name: "Ananya Deshmukh",
+          role: "VENDOR",
+          email: "ananya.d@tatapower.com",
+          org: "Tata Power Renewable Energy Limited",
+        });
       }
     }
-  }, []);
+  }, [pathname]);
 
   const handleLogout = () => {
     if (typeof window !== "undefined") {
@@ -222,10 +254,16 @@ export default function AppShell({ children, pageTitle }: AppShellProps) {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 bg-[#f0f5fa] border border-[#d8e2ec] px-3 py-1.5 rounded-md text-xs text-[#526d85]">
+            <button
+              onClick={() => setSearchModalOpen(true)}
+              className="hidden sm:flex items-center gap-2 bg-[#f0f5fa] hover:bg-[#e4ee6a]/20 border border-[#d8e2ec] hover:border-[#004e8a] px-3 py-1.5 rounded-md text-xs text-[#526d85] hover:text-[#004e8a] transition cursor-pointer"
+            >
               <Search size={14} />
               <span>Search tenders, bids, or clauses...</span>
-            </div>
+              <kbd className="ml-2 px-1.5 py-0.5 text-[10px] font-semibold text-slate-400 bg-white border border-slate-200 rounded">
+                Ctrl K
+              </kbd>
+            </button>
 
             <button className="relative p-2 text-gray-500 hover:bg-gray-100 rounded-full">
               <Bell size={18} />
@@ -263,10 +301,16 @@ export default function AppShell({ children, pageTitle }: AppShellProps) {
             <span>•</span>
             <span>AI-Powered Procurement Compliance & Risk Intelligence Platform</span>
           </div>
-          <div>© 2026 BIDSETU • Powered by OneBuilds</div>
+          <div>© 2026 BIDSETU • Developed by OneBuilds and Development Team</div>
         </footer>
       </div>
     </div>
+
+    {/* GLOBAL SEARCH MODAL */}
+    <GlobalSearchModal
+      isOpen={searchModalOpen}
+      onClose={() => setSearchModalOpen(false)}
+    />
   </div>
 );
 }
